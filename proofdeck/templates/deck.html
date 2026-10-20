@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>{{ deck.title }}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family={{ brand.font | replace(' ', '+') }}:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--primary:{{ brand.primary }};--accent:{{ brand.accent }};--bg:{{ brand.background }};
+  --text:{{ brand.text }};--muted:{{ brand.muted }};--line:color-mix(in srgb,var(--text) 12%,transparent)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--text);font-family:"{{ brand.font }}",-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+main{height:100%;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth}
+section.card{min-height:100%;scroll-snap-align:start;display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(28px,6vw,96px) clamp(20px,8vw,140px);position:relative}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:14px}
+h1{font-size:clamp(36px,6.4vw,84px);line-height:1.02;margin:0 0 20px;font-weight:800;letter-spacing:-.02em;color:var(--primary)}
+h2{font-size:clamp(28px,4.2vw,52px);line-height:1.08;margin:0 0 32px;font-weight:800;letter-spacing:-.015em;color:var(--primary);max-width:20ch}
+ul{list-style:none;margin:0;padding:0;display:grid;gap:18px;max-width:900px}
+li{font-size:clamp(17px,1.7vw,24px);line-height:1.4;padding-left:22px;position:relative}
+li::before{content:"";position:absolute;left:0;top:.6em;width:8px;height:8px;border-radius:2px;background:var(--accent)}
+sup a{font-size:.55em;color:var(--muted);text-decoration:none;margin-left:2px;font-weight:600}
+.title li{font-size:clamp(20px,2.2vw,30px);color:var(--muted);padding:0}.title li::before{display:none}
+.stats{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;max-width:1100px}
+.stats li{padding:22px 22px 20px;border:1px solid var(--line);border-radius:16px;background:color-mix(in srgb,var(--bg) 70%,white)}
+.stats li::before{display:none}
+.stat{display:block;font-size:clamp(34px,4.4vw,56px);font-weight:800;letter-spacing:-.02em;color:var(--primary);line-height:1;margin-bottom:10px}
+.stats .rest{font-size:clamp(15px,1.4vw,19px);color:var(--muted)}
+.quotes li{font-size:clamp(20px,2.3vw,32px);font-style:italic;padding-left:0;line-height:1.35}
+.quotes li::before{display:none}
+.plan{counter-reset:step}.plan li{counter-increment:step;padding-left:48px}
+.plan li::before{content:counter(step);width:32px;height:32px;border-radius:50%;top:0;display:flex;
+  align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:700;background:var(--primary)}
+.sources{position:absolute;left:clamp(20px,8vw,140px);right:clamp(20px,8vw,140px);bottom:22px;font-size:12px;color:var(--muted);
+  border-top:1px solid var(--line);padding-top:10px;display:flex;flex-wrap:wrap;gap:4px 16px}
+.sources span b{font-weight:600}
+.brand{position:fixed;top:18px;left:clamp(20px,8vw,140px);font-weight:800;font-size:15px;color:var(--primary);z-index:2;display:flex;align-items:center;gap:8px}
+.brand img{height:22px}
+.nav{position:fixed;right:18px;top:50%;transform:translateY(-50%);display:grid;gap:8px;z-index:2}
+.nav a{width:8px;height:8px;border-radius:50%;background:var(--line);display:block}
+.nav a.on{background:var(--accent)}
+.count{position:fixed;right:22px;bottom:18px;font-size:12px;color:var(--muted);z-index:2}
+@media (max-width:640px){.nav{display:none}.sources{position:static;margin-top:28px}}
+@media print{main{height:auto;overflow:visible}section.card{min-height:100vh;page-break-after:always}.nav,.count{display:none}}
+</style>
+</head>
+<body>
+<div class="brand">{% if brand.logo_url %}<img src="{{ brand.logo_url }}" alt="">{% endif %}{{ brand.name or deck.company }}</div>
+<main id="deck">
+{% for card in deck.cards %}
+{% set i = loop.index0 %}
+<section class="card {{ card.type }}" id="c{{ i }}" data-card="{{ i }}" data-type="{{ card.type }}">
+  {% if card.type == "title" %}
+    {% if deck.recipient %}<div class="kicker">Prepared for {{ deck.recipient }}</div>{% endif %}
+    <h1>{{ card.heading }}</h1>
+  {% else %}
+    <div class="kicker">{{ card.type | replace("_", " ") }}</div>
+    <h2>{{ card.heading }}{% for c in card.cites %}<sup><a href="#c{{ i }}" title="source">{{ numbering[c] }}</a></sup>{% endfor %}</h2>
+  {% endif %}
+  {% set big = card.type in ["traction", "pricing", "market"] %}
+  <ul class="{{ 'stats' if big else 'quotes' if card.type == 'their_words' else 'plan' if card.type == 'plan' else '' }}">
+  {% for b in card.bullets %}
+    {% if big %}{% set s = b.text | stat_split %}{% endif %}
+    <li>{% if big and s[0] %}<span class="stat">{{ s[0] }}</span><span class="rest">{{ s[1] }}</span>{% else %}{{ b.text }}{% endif %}{% for c in b.cites %}<sup><a href="#c{{ i }}" title="source">{{ numbering[c] }}</a></sup>{% endfor %}</li>
+  {% endfor %}
+  </ul>
+  {% if sources[i] and card.type not in ["title"] %}
+  <div class="sources">{% for n, src, _ in sources[i] %}<span><b>{{ n }}</b> {{ src }}</span>{% endfor %}</div>
+  {% endif %}
+</section>
+{% endfor %}
+</main>
+<nav class="nav">{% for card in deck.cards %}<a href="#c{{ loop.index0 }}" aria-label="card {{ loop.index }}"></a>{% endfor %}</nav>
+<div class="count" id="count">1 / {{ deck.cards | length }}</div>
+<script>
+(function(){
+  const cards=[...document.querySelectorAll("section.card")], dots=[...document.querySelectorAll(".nav a")];
+  const main=document.getElementById("deck"), count=document.getElementById("count");
+  let current=0;
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>=.55){
+    current=+e.target.dataset.card;dots.forEach((d,k)=>d.classList.toggle("on",k===current));
+    count.textContent=(current+1)+" / "+cards.length;window.__pdCard&&window.__pdCard(current);}})},{root:main,threshold:[.55]});
+  cards.forEach(c=>io.observe(c));
+  document.addEventListener("keydown",e=>{
+    const go=k=>{const t=cards[Math.max(0,Math.min(cards.length-1,k))];t&&t.scrollIntoView()};
+    if(["ArrowDown","ArrowRight","PageDown"," "].includes(e.key)){e.preventDefault();go(current+1)}
+    if(["ArrowUp","ArrowLeft","PageUp"].includes(e.key)){e.preventDefault();go(current-1)}
+  });
+})();
+{% if token %}
+(function(){
+  // Card-level time on screen. Counts only while the tab is visible.
+  const URL={{ beacon_url | tojson }}, TOKEN={{ token | tojson }};
+  let card=0, since=performance.now(), acc={};
+  function tick(){ if(document.visibilityState!=="visible"){since=performance.now();return}
+    const now=performance.now(); acc[card]=(acc[card]||0)+(now-since); since=now; }
+  function flush(){ tick(); const ev=Object.entries(acc).filter(([,ms])=>ms>=300).map(([c,ms])=>({card:+c,ms:Math.round(ms)}));
+    acc={}; if(!ev.length) return;
+    const body=JSON.stringify({token:TOKEN,events:ev,n:{{ deck.cards | length }}});
+    if(!(navigator.sendBeacon&&navigator.sendBeacon(URL,new Blob([body],{type:"application/json"}))))
+      fetch(URL,{method:"POST",body,headers:{"content-type":"application/json"},keepalive:true,credentials:"same-origin"}); }
+  window.__pdCard=c=>{tick();card=c};
+  document.addEventListener("visibilitychange",()=>{ if(document.visibilityState==="hidden") flush(); else since=performance.now(); });
+  addEventListener("pagehide",flush); setInterval(flush,5000);
+  fetch(URL,{method:"POST",body:JSON.stringify({token:TOKEN,events:[],open:true}),headers:{"content-type":"application/json"},credentials:"same-origin"});
+})();
+{% endif %}
+</script>
+</body>
+</html>

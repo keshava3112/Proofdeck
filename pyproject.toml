@@ -1,0 +1,42 @@
+[project]
+name = "proofdeck"
+version = "0.1.0"
+description = "Open-source AI decks for founders and sales that can't make things up, and tell you who actually read them."
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.11"
+keywords = ["pitch-deck", "sales", "fundraising", "presentations", "llm", "docsend-alternative", "gamma-alternative"]
+dependencies = [
+  "anthropic>=0.40",
+  "starlette>=0.37",
+  "uvicorn>=0.30",
+  "jinja2>=3.1",
+  "python-pptx>=1.0",
+  "pyyaml>=6.0",
+  "sqlalchemy>=2.0",
+  "httpx>=0.27",
+  "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+postgres = ["psycopg[binary]>=3.1"]
+dev = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://github.com/keshava3112/Proofdeck"
+
+[project.scripts]
+proofdeck = "proofdeck.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["proofdeck*"]
+
+[tool.setuptools.package-data]
+proofdeck = ["templates/*.html", "examples/*.yaml", "examples/*/*.yaml", "examples/*/*.csv"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

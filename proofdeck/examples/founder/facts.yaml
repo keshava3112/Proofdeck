@@ -1,0 +1,67 @@
+# Fictional company for the demo. Every number in a generated deck must come from here.
+company: Freightline
+tagline: AI dispatch for mid-size trucking fleets
+facts:
+  - id: p1
+    kind: problem
+    text: Dispatchers plan routes on WhatsApp and spreadsheets, re-keying every load by hand
+    source: 41 customer interviews, Jun–Aug 2026
+  - id: p2
+    kind: problem
+    text: Trucks run empty on 28% of kilometres in mid-size fleets
+    source: Freightline fleet sample, 1,900 trucks, Q2 2026
+  - id: s1
+    kind: solution
+    text: Reads loads from email and WhatsApp, plans routes, and books backhauls automatically
+    source: Product
+  - id: s2
+    kind: solution
+    text: Drivers get turn-by-turn jobs in a lightweight app that works on 2G
+    source: Product
+  - id: arr
+    kind: metric
+    text: $1.2M ARR, up from $310K a year ago
+    source: Stripe + invoices, Sep 2026
+    tags: [traction]
+  - id: mom
+    kind: metric
+    text: 14% month-over-month revenue growth for the last 6 months
+    source: Stripe, Apr–Sep 2026
+    tags: [traction]
+  - id: nrr
+    kind: metric
+    text: 131% net revenue retention
+    source: Cohort analysis, Sep 2026
+    tags: [traction]
+  - id: empty
+    kind: metric
+    text: 9-point drop in empty kilometres within 60 days of going live
+    source: Median across 23 live fleets
+    tags: [traction]
+  - id: cs1
+    kind: case_study
+    text: Kaveri Logistics cut dispatch time from 3 hours to 25 minutes a day
+    source: Kaveri Logistics ops report, Jul 2026
+    tags: [food, fmcg]
+  - id: cs2
+    kind: case_study
+    text: Sahyadri Cold Chain added ₹40L a month in backhaul revenue
+    source: Customer finance team, Aug 2026
+    tags: [cold-chain, food]
+  - id: tam
+    kind: claim
+    text: 2.1 million trucks in fleets of 20–200 vehicles in India alone
+    source: Ministry of Road Transport data, 2025
+    tags: [market]
+  - id: t1
+    kind: team
+    text: Ananya Rao, CEO — ran dispatch for a 600-truck fleet for 6 years
+    source: LinkedIn
+  - id: t2
+    kind: team
+    text: Vikram Shah, CTO — built routing at a ride-hailing company at national scale
+    source: LinkedIn
+  - id: ask
+    kind: ask
+    text: Raising $4M seed to reach 150 fleets and $5M ARR in 18 months
+    source: Plan of record

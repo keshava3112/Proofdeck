@@ -1,0 +1,57 @@
+# Sales facts library: price book, approved case studies, product claims.
+company: Freightline
+tagline: AI dispatch for mid-size trucking fleets
+facts:
+  - id: s1
+    kind: solution
+    text: Reads loads from email and WhatsApp, so nobody re-keys orders
+    source: Product
+    tags: [food, fmcg, cold-chain]
+  - id: s2
+    kind: solution
+    text: Plans routes and books backhauls automatically
+    source: Product
+  - id: s3
+    kind: solution
+    text: Temperature alerts from reefer sensors, routed to the dispatcher on duty
+    source: Product
+    tags: [cold-chain, food]
+  - id: cs1
+    kind: case_study
+    text: Kaveri Logistics cut dispatch time from 3 hours to 25 minutes a day
+    source: Kaveri Logistics ops report, Jul 2026
+    tags: [food, fmcg]
+  - id: cs2
+    kind: case_study
+    text: Sahyadri Cold Chain added ₹40L a month in backhaul revenue
+    source: Customer finance team, Aug 2026
+    tags: [cold-chain, food]
+  - id: cs3
+    kind: case_study
+    text: Deccan Cement reduced detention charges by 22%
+    source: Customer ops report, May 2026
+    tags: [construction]
+  - id: price1
+    kind: price
+    text: ₹2,400 per truck per month, billed annually
+    source: Price book v7
+  - id: price2
+    kind: price
+    text: Onboarding included for fleets of 50+ trucks
+    source: Price book v7
+  - id: price3
+    kind: price
+    text: 30-day pilot on up to 20 trucks at no cost
+    source: Price book v7
+  - id: plan1
+    kind: plan
+    text: Connect your order inbox and WhatsApp group (Day 1)
+    source: Standard onboarding
+  - id: plan2
+    kind: plan
+    text: Dispatchers run Freightline alongside the current process (Week 1)
+    source: Standard onboarding
+  - id: plan3
+    kind: plan
+    text: Review empty-km and dispatch-time results together (Day 30)
+    source: Standard onboarding

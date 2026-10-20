@@ -1,0 +1,17 @@
+# What you learned on the discovery call. Quotes become citable facts.
+mode: sales
+source: discovery call, 14 Oct 2026
+recipient:
+  name: Meera Nair
+  company: Juniper Foods
+  role: COO
+  industry: food
+  tags: [cold-chain]
+quotes:
+  - speaker: Meera
+    text: Every order comes in on WhatsApp and someone re-types it into Excel.
+  - speaker: Meera
+    text: Our trucks come back empty from Hosur almost every day.
+  - speaker: Rahul (dispatch lead)
+    text: When a reefer goes warm, we find out from the customer.
+goal: Start the free pilot on Juniper's Hosur route with Rahul's dispatch team.

@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><title>{{ title }}</title>
+<style>
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#faf9f6;
+  font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;color:#1d1c1d;padding:20px}
+form{background:#fff;border:1px solid #e3e1da;border-radius:16px;padding:32px;width:100%;max-width:400px}
+h1{font-size:22px;margin:0 0 8px}p{color:#6b6a65;margin:0 0 20px;font-size:15px}
+input{width:100%;padding:12px 14px;border:1px solid #d8d6cf;border-radius:10px;font-size:16px;box-sizing:border-box}
+button{margin-top:12px;width:100%;padding:12px;border:0;border-radius:10px;background:#1f2328;color:#fff;font-size:16px;font-weight:600;cursor:pointer}
+.err{color:#c0392b;font-size:14px;margin-top:8px}
+</style></head>
+<body><form method="post">
+<h1>{{ title }}</h1><p>Enter your email to view.</p>
+<input type="email" name="email" placeholder="you@company.com" required autofocus>
+{% if error %}<div class="err">Please enter a valid email.</div>{% endif %}
+<button type="submit">View</button>
+</form></body></html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><title>Proofdeck</title>
+<style>
+:root{--line:#e7e5df;--muted:#6b6a65;--ink:#1d1c1d;--accent:#2f5bd3;--hot:#c2410c}
+body{margin:0;background:#faf9f6;color:var(--ink);font-family:-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;font-size:14px}
+header{display:flex;align-items:center;gap:16px;padding:16px 28px;border-bottom:1px solid var(--line);background:#fff}
+header b{font-size:16px}header a{color:var(--muted);text-decoration:none}
+.wrap{padding:24px 28px;max-width:1200px}
+h1{font-size:22px;margin:0 0 4px}.sub{color:var(--muted);margin-bottom:20px}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--line);background:#fcfbf8}
+td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+a{color:var(--accent)}
+.score{font-weight:800;font-size:18px}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:2px 7px;border-radius:99px;margin:0 4px 4px 0}
+.fw{background:#e8eefc;color:#2f5bd3}.hot{background:#fdeee6;color:var(--hot)}.no{background:#f1f0eb;color:var(--muted)}
+.hint{color:var(--muted);font-size:13px;margin-top:4px;max-width:360px}
+.heat{display:flex;gap:3px;align-items:flex-end;height:28px}
+.heat i{width:10px;background:var(--accent);border-radius:2px;opacity:.85}
+.cards{display:grid;gap:8px;margin:12px 0 28px}
+.cardrow{display:grid;grid-template-columns:28px 1fr 220px 60px;gap:10px;align-items:center}
+.bar{height:10px;background:#eef1fb;border-radius:5px;overflow:hidden}.bar span{display:block;height:100%;background:var(--accent)}
+code{font-size:12px;background:#f1f0eb;padding:2px 6px;border-radius:5px}
+.actions a{margin-right:14px}
+</style></head><body>
+<header><b>Proofdeck</b><a href="/admin">Decks</a></header>
+<div class="wrap">
+{% if page == "list" %}
+  <h1>Decks</h1><div class="sub">Every deck is grounded in a facts snapshot and shared with one tracked link per recipient.</div>
+  <table><tr><th>Deck</th><th>Mode</th><th>Recipients</th><th>Opened</th><th>Total time</th><th>Created</th></tr>
+  {% for d, n, opened, secs in rows %}
+    <tr><td><a href="/admin/decks/{{ d.id }}">{{ d.title }}</a></td><td>{{ d.mode }}</td><td>{{ n }}</td>
+    <td>{{ opened }}</td><td>{{ (secs // 60) }}m {{ secs % 60 }}s</td><td>{{ d.created_at.strftime("%d %b %Y") }}</td></tr>
+  {% else %}<tr><td colspan="6">No decks yet. Run <code>proofdeck demo</code> or <code>proofdeck share</code>.</td></tr>{% endfor %}
+  </table>
+{% else %}
+  <h1>{{ deck.title }}</h1>
+  <div class="sub actions">{{ deck.mode | title }} deck · {{ board | length }} recipients ·
+    <a href="/admin/decks/{{ row.id }}/preview" target="_blank">Preview</a><a href="/admin/decks/{{ row.id }}/pptx">Download PPTX</a></div>
+  <div class="cards">
+  {% for c in deck.cards %}
+    <div class="cardrow"><span style="color:var(--muted)">{{ loop.index }}</span><span>{{ c.heading }} <span style="color:var(--muted)">· {{ c.type | replace("_"," ") }}</span></span>
+    <div class="bar"><span style="width:{{ (100 * totals[loop.index0] / peak) | round }}%"></span></div><span style="color:var(--muted)">{{ totals[loop.index0] }}s</span></div>
+  {% endfor %}
+  </div>
+  <table><tr><th>Who to follow up with</th><th>Score</th><th>Read</th><th>Time</th><th>Per card</th><th>Link</th></tr>
+  {% for e in board %}
+    <tr><td><b>{{ e.link.recipient }}</b>{% if e.link.company %} · {{ e.link.company }}{% endif %}<br>
+      {% if e.viewers == 0 %}<span class="tag no">not opened</span>{% endif %}
+      {% if e.forwarded %}<span class="tag fw">forwarded · {{ e.viewers }} viewers</span>{% endif %}
+      {% if e.sessions > e.viewers %}<span class="tag fw">came back</span>{% endif %}
+      {% for h in e.hot %}<span class="tag hot">🔥 {{ h | replace("_"," ") }}</span>{% endfor %}
+      <div class="hint">{{ hint(e) }}</div></td>
+    <td class="score">{{ e.score | round | int }}</td>
+    <td>{{ e.cards_seen }}/{{ e.cards_total }}</td>
+    <td>{{ e.seconds // 60 }}m {{ e.seconds % 60 }}s</td>
+    <td><div class="heat">{% set m = (e.per_card | max) or 1 %}{% for sec in e.per_card %}<i style="height:{{ 3 + (25 * sec / m) | round }}px" title="card {{ loop.index }}: {{ sec }}s"></i>{% endfor %}</div></td>
+    <td><code>{{ base }}/d/{{ e.link.token }}</code></td></tr>
+  {% endfor %}
+  </table>
+{% endif %}
+</div></body></html>
